@@ -1,0 +1,62 @@
+{
+  "name": "library-template",
+  "version": "0.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "YOUR_NAME_HERE",
+  "repository": "foxkit-js/library-template",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "prepare": "simple-git-hooks",
+    "format": "prettier -w .",
+    "format:check": "prettier -c .",
+    "lint": "eslint .",
+    "lint:strict": "eslint --max-warnings 0 .",
+    "typecheck": "tsc",
+    "test": "uvu -r esbuild-register tests -i utils",
+    "build": "node build.js && tsc -p tsconfig.build.json"
+  },
+  "nano-staged": {
+    "**/*.{js,cjs,mjs,ts,mts,cts,json,md,yaml}": [
+      "prettier -w"
+    ]
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm nano-staged"
+  },
+  "files": [
+    "*.d.ts",
+    "index.*"
+  ],
+  "publishConfig": {
+    "removeFields": [
+      "scripts",
+      "nano-staged",
+      "simple-git-hooks"
+    ],
+    "publishConfig": {
+      "access": "public"
+    },
+    "private": false,
+    "main": "index.cjs",
+    "module": "index.js",
+    "types": "index.d.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/node": "^22.10.5",
+    "esbuild": "^0.24.2",
+    "esbuild-register": "^3.6.0",
+    "eslint": "^9.17.0",
+    "eslint-config-foxkit": "5.0.1",
+    "eslint-config-prettier": "^9.1.0",
+    "nano-staged": "^0.8.0",
+    "prettier": "^3.4.2",
+    "simple-git-hooks": "^2.11.1",
+    "typescript": "5.7.3",
+    "uvu": "^0.5.6"
+  }
+}
