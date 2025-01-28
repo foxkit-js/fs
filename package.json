@@ -64,5 +64,8 @@
     "simple-git-hooks": "^2.11.1",
     "typescript": "5.7.3",
     "uvu": "^0.5.6"
+  },
+  "peerDependencies": {
+    "@types/node": ">=10"
   }
 }
