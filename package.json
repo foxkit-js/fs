@@ -1,10 +1,16 @@
 {
-  "name": "library-template",
+  "name": "@foxkit/fs",
   "version": "0.0.0",
-  "description": "",
-  "keywords": [],
-  "author": "YOUR_NAME_HERE",
-  "repository": "foxkit-js/library-template",
+  "description": "Filesystem Helpers with full TypeScript support for Node.js",
+  "keywords": [
+    "filesystem",
+    "read",
+    "write",
+    "IO",
+    "helpers"
+  ],
+  "author": "Mitsunee",
+  "repository": "foxkit-js/fs",
   "license": "MIT",
   "private": true,
   "type": "module",

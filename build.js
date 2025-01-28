@@ -121,28 +121,6 @@ function buildESM() {
   });
 }
 
-/**
- * Handle build of CJS bundle
- * @returns Promise
- */
-function buildCJS() {
-  console.log("Building cjs bundles");
-  return esbuild.build({
-    ...config,
-    format: "cjs",
-    outExtension: { ".js": ".cjs" },
-    footer: {
-      /**
-       * This is required for interoperability with default exports
-       * @see https://github.com/evanw/esbuild/issues/1182#issuecomment-1011414271
-       * Feel free to remove this if you are not using default exports
-       * and this is causing problems
-       */
-      js: "if (module.exports.default) module.exports = module.exports.default"
-    }
-  });
-}
-
 async function build() {
   // Clean dist directory
   await handleClean();
@@ -150,7 +128,6 @@ async function build() {
   console.log("Starting build");
   const res = await Promise.allSettled([
     buildESM(),
-    buildCJS(),
     copyFiles(["README.md", "LICENSE"]),
     handlePkgJson()
   ]);
