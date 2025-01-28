@@ -47,7 +47,6 @@
       "access": "public"
     },
     "private": false,
-    "main": "index.cjs",
     "module": "index.js",
     "types": "index.d.ts"
   },
