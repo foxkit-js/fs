@@ -72,3 +72,28 @@ test("it returns error when it can't write", async () => {
 });
 
 test.run();
+
+/**
+ * Test types
+ */
+// prettier-ignore
+const _ = () => {
+  // simple string use
+  writeFile("path", "data");
+  
+  // string with serializer should be allowed
+  writeFile("path", "data", data => data.toUpperCase());
+  
+  // expect error with non-string data and missing serializer
+  writeFile(
+    "path",
+    //@ts-expect-error
+    { data: "as object" }
+  );
+  
+  // non-string data with serializer should be fine
+  writeFile("path", { data: "as object" }, data => JSON.stringify(data));
+  
+  // non-string data with async serializer should be fine
+  writeFile("path", { data: "as object" }, async data => JSON.stringify(data));
+}

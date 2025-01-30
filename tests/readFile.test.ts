@@ -1,10 +1,9 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
+import type { FileReadResult } from "../src";
 import { readFile } from "../src";
 import { testJSON } from "./utils/testJSON";
 import { sleep } from "./utils/sleep";
-
-console.assert(typeof testJSON == "object");
 
 test("it succeeds on lorem.txt", async () => {
   const res = await readFile("tests/utils/lorem.txt");
@@ -52,3 +51,29 @@ test("it returns errors thrown in parser", async () => {
 });
 
 test.run();
+
+/**
+ * Test types
+ */
+// prettier-ignore
+const _ = () => {
+  // simple string use
+  const _0 = readFile("") satisfies FileReadResult<string>;
+  
+  // string with parser should be allowed
+  const _1 = readFile("", data =>
+    data.toUpperCase()
+  ) satisfies FileReadResult<string>;
+  
+  // parser should override return type
+  const _2 = readFile("", data => data.split("\n")) satisfies FileReadResult<string[]>;
+  const _3 = readFile("", data => data.split("\n")
+    //@ts-expect-error
+  ) satisfies FileReadResult<string>;
+  
+  // accepts async parser function
+  const _4 = readFile("", async data => data.split("\n")) satisfies FileReadResult<string[]>;
+  const _5 = readFile("", async data => data.split("\n")
+    //@ts-expect-error
+  ) satisfies FileReadResult<string>;
+};
