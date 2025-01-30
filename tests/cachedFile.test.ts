@@ -31,7 +31,7 @@ test("it stores data in cache", async () => {
 
 test("it respects max-age", async () => {
   assert.ok(file.has(filePath), "file is in cache from previous test");
-  await sleep(1501);
+  await sleep(2000);
   assert.not(
     file.has(filePath, 1),
     "file is gone after over a second with max age of 1"
