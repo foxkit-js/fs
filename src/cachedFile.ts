@@ -5,7 +5,13 @@ import type { FileParser } from "./readFile";
 import { readFile } from "./readFile";
 
 interface CachedFileFns<T> {
+  /**
+   * Function that parses data `T` from string to any type. May be async.
+   */
   parse: FileParser<T>;
+  /**
+   * Function that transform data `T` to string. May be async.
+   */
   serialize: FileSerializer<T>;
 }
 type CachedFileOpts<T = string> = {
@@ -67,7 +73,7 @@ function createFileCache<T>() {
 
 /**
  * Creates file read/write adapter with built-in caching
- * @param opts Object with parse and serialize functions, as well as optional maxCacheAge. Functions may be omitted for string data.
+ * @param opts Object with `parse` and `serialize` functions, as well as optional `maxCacheAge`. Functions may be omitted for string data.
  * @returns Adapter
  */
 export function createCachedFile<T = string>(opts: CachedFileOpts<T>) {

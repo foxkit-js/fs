@@ -1,18 +1,47 @@
 import * as fs from "fs/promises";
 
 /**
- * Function that parses data from string to any type. May be async.
+ * Function that parses data `T` from string to any type. May be async.
  */
 export type FileParser<T> = (content: string) => T | Promise<T>;
+
+/**
+ * Result of a successful file read with parsed data
+ */
+interface FileReadResultSuccess<T> {
+  /**
+   * Data from the file (parsed if a `FileParser` was provided)
+   */
+  data: T;
+  /**
+   * No error occured
+   */
+  error?: undefined;
+  success: true;
+}
+
+/**
+ * Result of an unsuccessful file read with occured error
+ */
+interface FileReadResultError {
+  /**
+   * No data was returned due to an error
+   */
+  data?: undefined;
+  /**
+   * Error that occured when attempting to read the file
+   */
+  error: unknown;
+  success: false;
+}
+
 /**
  * Object describing the result of a file read. Always contains `success` property.
  * If successful the read/parsed data is available in the `data` property,
  * otherwise the error that occurred can be found in the `error` property.
  */
-// TODO: split into interfaces, add JSDocs to properties of those?
 export type FileReadResult<T = string> = Promise<
-  | { data: T; error?: undefined; success: true }
-  | { data?: undefined; error: unknown; success: false }
+  FileReadResultSuccess<T> | FileReadResultError
 >;
 
 /**

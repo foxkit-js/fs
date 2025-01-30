@@ -1,9 +1,35 @@
 import * as fs from "fs/promises";
 import { dirname } from "path";
 
+/**
+ * Function that transform data `T` to string. May be async.
+ */
 export type FileSerializer<T> = (data: T) => string | Promise<string>;
+
+/**
+ * Result of a successful file write
+ */
+interface FileWriteResultSuccess {
+  /**
+   * No error occured
+   */
+  error?: undefined;
+  success: true;
+}
+
+/**
+ * Result of an unsuccessful file write with occurred error
+ */
+interface FileWriteResultError {
+  /**
+   * Error that occured when attempting to write the file
+   */
+  error: unknown;
+  success: false;
+}
+
 export type FileWriteResult = Promise<
-  { error?: undefined; success: true } | { error: unknown; success: false }
+  FileWriteResultSuccess | FileWriteResultError
 >;
 
 /**
