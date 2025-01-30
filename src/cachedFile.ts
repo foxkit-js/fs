@@ -1,10 +1,17 @@
 import { resolve } from "path";
-import type { FileSerializer } from "./writeFile";
+import type { FileSerializer, FileWriteResult } from "./writeFile";
 import { writeFile } from "./writeFile";
-import type { FileParser } from "./readFile";
+import type { FileParser, FileReadResult } from "./readFile";
 import { readFile } from "./readFile";
 
-interface CachedFileFns<T> {
+/**
+ * Options object to configure cached file read/write adapter
+ */
+interface CachedFileOpts<T> {
+  /**
+   * Maximum cache age in seconds
+   */
+  maxCacheAge?: number;
   /**
    * Function that parses data `T` from string to any type. May be async.
    */
@@ -14,12 +21,7 @@ interface CachedFileFns<T> {
    */
   serialize: FileSerializer<T>;
 }
-type CachedFileOpts<T = string> = {
-  /**
-   * Maximum cache age in seconds
-   */
-  maxCacheAge?: number;
-} & (T extends string ? Partial<CachedFileFns<T>> : CachedFileFns<T>);
+
 interface FileCache<T> {
   cacheTime: number;
   data: T;
@@ -71,12 +73,22 @@ function createFileCache<T>() {
   return { set, get, has };
 }
 
+interface CachedFile<T> {
+  write: (path: string, data: T) => FileWriteResult;
+  read: (path: string, maxCacheAge?: number) => FileReadResult<T>;
+  has: (path: string, maxCacheAge?: number) => boolean;
+}
+
 /**
  * Creates file read/write adapter with built-in caching
  * @param opts Object with `parse` and `serialize` functions, as well as optional `maxCacheAge`. Functions may be omitted for string data.
  * @returns Adapter
  */
-export function createCachedFile<T = string>(opts: CachedFileOpts<T>) {
+export function createCachedFile<T>(opts: CachedFileOpts<T>): CachedFile<T>;
+export function createCachedFile(
+  opts: Partial<CachedFileOpts<string>>
+): CachedFile<string>;
+export function createCachedFile<T = string>(opts: Partial<CachedFileOpts<T>>) {
   const parse: FileParser<T> = opts?.parse || (v => v as T);
   const serialize: FileSerializer<T> = opts?.serialize || (v => v as string);
   const cache = createFileCache<T>();

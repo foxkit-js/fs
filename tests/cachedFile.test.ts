@@ -1,8 +1,9 @@
 import * as fs from "fs/promises";
 import { test } from "uvu";
 import * as assert from "uvu/assert";
-import { testJSON } from "./utils/testJSON";
 import { createCachedFile } from "../src/cachedFile";
+import type { FileReadResult } from "../src";
+import { testJSON } from "./utils/testJSON";
 import { sleep } from "./utils/sleep";
 
 const file = createCachedFile<unknown>({
@@ -55,3 +56,30 @@ test("it return FileWriteResult with error", async () => {
 });
 
 test.run();
+
+/**
+ * Test types
+ */
+// prettier-ignore
+const _ = () => {
+  const _fileString = createCachedFile({});
+  const _fileArr = createCachedFile({
+    parse: (data) => data.split(","),
+    serialize: (data) => data.join(",")
+  });
+
+  // file reads have correct types
+  const _0 = _fileString.read("") satisfies FileReadResult<string>;
+  const _1 = _fileArr.read("") satisfies FileReadResult<string[]>;
+  // @ts-expect-error
+  const _2 = _fileArr.read("") satisfies FileReadResult<string>;
+
+  // explodes when types of parser and serializer don't match
+  const _3 = createCachedFile(
+    // @ts-expect-error
+    { parse: data => data.split(","), serialize: (data: Record<string, string>) => JSON.stringify(data) }
+  )
+
+  // can still put maxCacheAge when T is string
+  const _4 = createCachedFile({ maxCacheAge: 42 })
+}
