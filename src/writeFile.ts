@@ -9,9 +9,10 @@ export type FileWriteResult = Promise<
 /**
  * Asynchronously writes any data to file. Non-string data must be supplied with
  * a serialiser function. Directories are created as needed.
- * @param path
- * @param data
- * @param serialiser
+ * @param path Path pointing to the file
+ * @param data Data to write to the file
+ * @param serialiser Function that transforms passed data to string
+ * @returns FileWriteResult
  */
 export async function writeFile<T>(
   path: string,
