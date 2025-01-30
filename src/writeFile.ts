@@ -29,7 +29,7 @@ export async function writeFile<T>(
   serialiser?: T extends string ? undefined : FileSerializer<T>
 ): FileWriteResult {
   try {
-    const content = serialiser ? serialiser(data) : (data as string);
+    const content = serialiser ? await serialiser(data) : (data as string);
     await fs.mkdir(dirname(path), { recursive: true });
     await fs.writeFile(path, content, "utf-8");
     return { success: true };

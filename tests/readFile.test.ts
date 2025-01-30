@@ -2,6 +2,7 @@ import { test } from "uvu";
 import * as assert from "uvu/assert";
 import { readFile } from "../src";
 import { testJSON } from "./utils/testJSON";
+import { sleep } from "./utils/sleep";
 
 console.assert(typeof testJSON == "object");
 
@@ -13,8 +14,19 @@ test("it succeeds on lorem.txt", async () => {
   assert.is(res.data, "lorem ipsum dolor sit amet", "content is correct data");
 });
 
-test("it parses test.json", async () => {
+test("it parses test.json (sync)", async () => {
   const res = await readFile("tests/utils/test.json", str => JSON.parse(str));
+  assert.ok(res.success, "file read succeeded");
+  assert.not(res.error, "no error was returned");
+  assert.type(res.data, "object", "content was parsed");
+  assert.equal(res.data, testJSON, "content was parsed correctly");
+});
+
+test("it parses test.json (async)", async () => {
+  const res = await readFile("tests/utils/test.json", async str => {
+    await sleep(25);
+    return JSON.parse(str);
+  });
   assert.ok(res.success, "file read succeeded");
   assert.not(res.error, "no error was returned");
   assert.type(res.data, "object", "content was parsed");
