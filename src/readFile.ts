@@ -1,5 +1,6 @@
 import * as fs from "fs/promises";
 
+export type FileParser<T> = (content: string) => T;
 export type FileReadResult<T = string> = Promise<
   | { data: T; error?: undefined; success: true }
   | { data?: undefined; error: unknown; success: false }
@@ -13,7 +14,7 @@ export type FileReadResult<T = string> = Promise<
  */
 export async function readFile<T>(
   path: string,
-  parser: (content: string) => T
+  parser: FileParser<T>
 ): FileReadResult<T>;
 export async function readFile(
   path: string,
@@ -21,7 +22,7 @@ export async function readFile(
 ): FileReadResult;
 export async function readFile<T = string>(
   path: string,
-  parser?: (content: string) => T
+  parser?: FileParser<T>
 ): FileReadResult<T> {
   try {
     const content = await fs.readFile(path, "utf-8");

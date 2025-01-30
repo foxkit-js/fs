@@ -1,6 +1,7 @@
 import * as fs from "fs/promises";
 import { dirname } from "path";
 
+export type FileSerializer<T> = (data: T) => string | Promise<string>;
 export type FileWriteResult = Promise<
   { error?: undefined; success: true } | { error: unknown; success: false }
 >;
@@ -15,7 +16,7 @@ export type FileWriteResult = Promise<
 export async function writeFile<T>(
   path: string,
   data: T,
-  serialiser: (data: T) => string
+  serialiser: FileSerializer<T>
 ): FileWriteResult;
 export async function writeFile(
   path: string,
@@ -25,7 +26,7 @@ export async function writeFile(
 export async function writeFile<T>(
   path: string,
   data: T,
-  serialiser?: T extends string ? undefined : (data: T) => string
+  serialiser?: T extends string ? undefined : FileSerializer<T>
 ): FileWriteResult {
   try {
     const content = serialiser ? serialiser(data) : (data as string);
