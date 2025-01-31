@@ -128,7 +128,7 @@ async function build() {
   console.log("Starting build");
   const res = await Promise.allSettled([
     buildESM(),
-    copyFiles(["README.md", "LICENSE"]),
+    copyFiles(["README.md", "LICENSE", "docs"]),
     handlePkgJson()
   ]);
 
