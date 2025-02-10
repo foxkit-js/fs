@@ -1,6 +1,6 @@
 {
   "name": "@foxkit/fs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Filesystem Helpers with full TypeScript support for Node.js",
   "keywords": [
     "filesystem",
