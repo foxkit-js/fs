@@ -41,7 +41,8 @@
     "removeFields": [
       "scripts",
       "nano-staged",
-      "simple-git-hooks"
+      "simple-git-hooks",
+      "main"
     ],
     "publishConfig": {
       "access": "public"
