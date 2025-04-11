@@ -48,7 +48,7 @@
       "access": "public"
     },
     "private": false,
-    "module": "index.js",
+    "main": "index.js",
     "types": "index.d.ts"
   },
   "devDependencies": {
